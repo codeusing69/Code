@@ -1,0 +1,96 @@
+import turtle
+import math
+def draw(u,a=0,b=0,c=0,x=0,y=0,z=0):
+    if x==0 and y==0 and z==0:
+        x=float(str(round(math.degrees(math.acos((((a*a)+(b*b)-(c*c))/(2*a*b)))),2)))
+        y=float(str(round(math.degrees(math.acos((((c*c)+(b*b)-(a*a))/(2*c*b)))),2)))
+        z=float(str(round(math.degrees(math.acos((((c*c)+(a*a)-(b*b))/(2*c*a)))),2)))
+    elif b==0 and c==0 and y==0:
+        y=180-x-z
+        b=float(str(round((a*math.sin(math.radians(z)))/(math.sin(math.radians(y))),2)))
+        c=float(str(round((a*math.sin(math.radians(x)))/(math.sin(math.radians(y))),2)))
+    elif y==0 and z==0 and c==0:
+        c=float(str(round(math.sqrt((a*a)+(b*b)-(2*a*b*(math.cos(math.radians(x))))),2)))  
+        y=float(str(round(math.degrees(math.acos((((c*c)+(b*b)-(a*a))/(2*c*b)))),2)))
+        z=float(str(round(180-y-x,2)))
+    o=turtle.Turtle()
+    o.speed(0)
+    o.ht()
+    turtle.Screen().bgcolor('black')
+    o.pencolor("white")
+    for r in range(100):
+        if max([a,b,c])<=(10**r) and max([a,b,c])>=(10**(r-1)):
+            a,b,c=(a/(10**(r-1.5))),(b/(10**(r-1.5))),(c/(10**(r-1.5)))
+            break
+    for t in range(100):
+        if (max([a,b,c])*t)+40 >350 :
+            break
+    a*=t
+    b*=t
+    c*=t
+    xcen,ycen=(a+(c*math.cos(math.radians(z))))/3,(c*math.sin(math.radians(z)))/3
+    o.width(2)
+    o.pu()
+    o.goto(-xcen-200,-ycen)
+    o.pd()
+    for i,j,m in zip([a,b,c],[x,y,z],['A','B','C']):
+        o.fd(i/2)
+        o.pu()
+        o.right(90)
+        o.fd(25)
+        o.write((str(float(round(((10**(r-1.5))*i/t),2))) + " "+ u),align='center')
+        o.backward(25)
+        o.left(90)
+        o.pd()
+        o.fd(i/2)
+        o.pu()
+        o.left(90-j)
+        o.fd(40)
+        o.write(m)
+        o.left(180)
+        o.fd(40)
+        o.left(90+j)
+        o.right(j/2)
+        o.fd(40)
+        o.write(str(float(j))+'°',align='center')
+        o.left(180)
+        o.fd(40)
+        o.pd()
+        o.right(j/2)
+    o.pu()
+    o.pencolor('white')
+    o.home()
+    o.fd(200)
+    o.left(90)
+    for i,j in zip([z,y,x],['C','B','A']):
+        o.write("Angle " + j + ' = ' + str(i) + '°',font=("arial","20","bold"))
+        o.fd(30)
+    for i,j in zip([a,c,b],['AC','BC','AB']):
+        o.write("Side " + j + ' = ' + str(float(round(((10**(r-1.5))*i/t),2))) + ' ' + u,font=("arial","20","bold"))
+        o.fd(30)
+    turtle.done()
+
+def unit():
+    u=str(input("Enter unit for length (cm/m/km etc.) : "))
+    return(u)
+
+print("Available Options \n1 => Three sides \n2 => Two angle and one side \n3 => Two sides and one angle")
+x=int(input("Enter your choice (1/2/3) : "))
+while x not in [1,2,3]:
+    x=int(input("Please use Valid choices only! \nEnter your choice (1/2/3) : "))
+if x==1:
+    x11,x12,x13=int(input("Enter length of First side : ")),int(input("Enter length of Second side : ")),int(input("Enter length of Third side : "))
+    draw(unit(),a=x11,b=x12,c=x13)
+elif x==2:
+    x21,x22,x23=int(input("Enter length of First side : ")),int(input("Enter length of First angle : ")),int(input("Enter length of Second angle : "))
+    draw(unit(),a=x21,z=x22,x=x23)
+elif x==3:
+    x31,x32,x33=float(input("Enter length of First side : ")),float(input("Enter length of Second side : ")),float(input("Enter length of First angle (in degrees) : "))
+    draw(unit(),a=x31,b=x32,x=x33)
+
+
+
+
+# angle A = cos inverse(bsqaure+csquare-asquare/2bc)
+# °
+# size = 1350x700
